@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import './Login.css'; 
+import { postLogin } from '../services/api'
+import './Login.css';
 
 export const Login = ({ onLogin, onClose }) => {
   const [username, setUsername] = useState('');
@@ -10,37 +11,22 @@ export const Login = ({ onLogin, onClose }) => {
     event.preventDefault();
 
     try {
-      const response = await fetch('https://reqres.in/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: username,
-          password: password
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('Wrong Login. Please try again');
-      }
-
-      const data = await response.json();
-      onLogin();
+      const token = await postLogin({ username, password });
+      onLogin({ username, token });
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
 
   return (
-    
+
     <div className="login-modal">
       <div className="login-content">
       <p className='text-email'> For testing please use: <br />
       <strong>Email:</strong> eve.holt@reqres.in
       <br /><strong>Password:</strong> cityslicka </p>
         <form id="loginForm" onSubmit={handleSubmit}>
-          <input id="username" type="text" value={username} 
+          <input id="username" type="text" value={username}
           onChange={e => setUsername(e.target.value)}
           placeholder='Username' />
           <input id="password" type="password" value={password}
