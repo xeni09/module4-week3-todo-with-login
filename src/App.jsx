@@ -1,13 +1,15 @@
-import { useState } from 'react';
-import './App.css';
-import { Login } from './components/Login';
-import { TodoWrapper  } from './components/TodoWrapper';
+import { useState } from "react";
+import { Login } from "./components/Login";
+import { TodoWrapper } from "./components/TodoWrapper";
+
+import "./App.css";
 
 function App() {
-  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = ({ username, token }) => {
+    localStorage.setItem("username", username);
+    localStorage.setItem("token", token);
     setIsLoggedIn(true);
   };
 
@@ -16,10 +18,9 @@ function App() {
   }
   return (
     <div>
-    
       <TodoWrapper />
-    </div> 
+    </div>
   );
-};
+}
 
 export default App;
